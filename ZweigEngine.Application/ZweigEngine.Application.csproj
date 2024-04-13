@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ZweigEngine.Common\ZweigEngine.Common.csproj" />
+      <ProjectReference Include="..\ZweigEngine.OpenGL.Win32\ZweigEngine.OpenGL.Win32.csproj" />
+      <ProjectReference Include="..\ZweigEngine.OpenGL\ZweigEngine.OpenGL.csproj" />
+      <ProjectReference Include="..\ZweigEngine.Win32\ZweigEngine.Win32.csproj" />
+    </ItemGroup>
+
+</Project>
