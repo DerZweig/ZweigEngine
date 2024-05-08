@@ -11,12 +11,13 @@ public sealed class ServiceConfiguration
         m_entries = new List<Entry>();
     }
 
-    public void AddSingleton(Type interfaceType, Type implementationType)
+    public void AddSingleton<TInterface, TImplementation>(Action<TImplementation> configure) where TImplementation : TInterface
     {
         m_entries.Add(new Entry
                       {
-                          InterfaceType      = interfaceType,
-                          ImplementationType = implementationType
+                          InterfaceType      = typeof(TInterface),
+                          ImplementationType = typeof(TImplementation),
+                          Configure          = obj => configure((TImplementation)obj)
                       });
     }
 
@@ -25,26 +26,19 @@ public sealed class ServiceConfiguration
         m_entries.Add(new Entry
                       {
                           InterfaceType      = typeof(TInterface),
-                          ImplementationType = typeof(TImplementation)
+                          ImplementationType = typeof(TImplementation),
+                          Configure          = null
                       });
     }
 
-    public void AddSingleton(Type implementationType)
+    public void AddSingleton<TImplementation>(Action<TImplementation> configure)
     {
-        m_entries.Add(new Entry
-                      {
-                          InterfaceType      = implementationType,
-                          ImplementationType = implementationType
-                      });
+        AddSingleton<TImplementation, TImplementation>(configure);
     }
 
     public void AddSingleton<TImplementation>()
     {
-        m_entries.Add(new Entry
-                      {
-                          InterfaceType      = typeof(TImplementation),
-                          ImplementationType = typeof(TImplementation)
-                      });
+        AddSingleton<TImplementation, TImplementation>();
     }
 
     public ServiceProvider Build()
@@ -77,6 +71,7 @@ public sealed class ServiceConfiguration
                                                                      {
                                                                          InterfaceType      = entry.InterfaceType,
                                                                          ImplementationType = entry.ImplementationType,
+                                                                         Configure          = entry.Configure,
                                                                          Constructor        = ctor,
                                                                          ParameterTypes     = ctor.GetParameters().Select(param => param.ParameterType).ToArray()
                                                                      }).ToArray();
@@ -107,8 +102,9 @@ public sealed class ServiceConfiguration
                 else
                 {
                     var instance = descriptor.Constructor.Invoke(parameters);
-                    serviceProvider.AddSingleton(descriptor.InterfaceType, instance);
+                    descriptor.Configure?.Invoke(instance);
 
+                    serviceProvider.AddSingleton(descriptor.InterfaceType, instance);
                     if (descriptor.InterfaceType != descriptor.ImplementationType)
                     {
                         serviceProvider.AddSingleton(descriptor.ImplementationType, instance);
@@ -123,7 +119,7 @@ public sealed class ServiceConfiguration
 
             if (unresolvedPending.Count == pendingCount)
             {
-                throw new InvalidOperationException("Couldn't resolve one or more service dependencies. Please check for circular constructor paths.");
+                throw new InvalidOperationException("Couldn't resolve service dependencies. Please check for circular constructor paths.");
             }
 
             while (unresolvedPending.TryDequeue(out var item))
@@ -137,14 +133,13 @@ public sealed class ServiceConfiguration
 
     private class Entry
     {
-        public Type InterfaceType      { get; init; } = null!;
-        public Type ImplementationType { get; init; } = null!;
-    }
-
-    private class ServiceDescriptor
-    {
         public Type            InterfaceType      { get; init; } = null!;
         public Type            ImplementationType { get; init; } = null!;
+        public Action<object>? Configure          { get; init; }
+    }
+
+    private class ServiceDescriptor : Entry
+    {
         public ConstructorInfo Constructor        { get; init; } = null!;
         public Type[]          ParameterTypes     { get; init; } = null!;
     }
