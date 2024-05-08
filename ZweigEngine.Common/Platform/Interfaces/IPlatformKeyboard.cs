@@ -1,6 +1,6 @@
-﻿using ZweigEngine.Common.Interfaces.Platform.Constants;
+﻿using ZweigEngine.Common.Platform.Constants;
 
-namespace ZweigEngine.Common.Interfaces.Platform;
+namespace ZweigEngine.Common.Platform.Interfaces;
 
 public delegate void PlatformKeyPressedDelegate(IPlatformKeyboard keyboard, KeyboardKey key);
 

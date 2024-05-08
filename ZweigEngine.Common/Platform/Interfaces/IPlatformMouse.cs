@@ -1,6 +1,6 @@
-﻿using ZweigEngine.Common.Interfaces.Platform.Constants;
+﻿using ZweigEngine.Common.Platform.Constants;
 
-namespace ZweigEngine.Common.Interfaces.Platform;
+namespace ZweigEngine.Common.Platform.Interfaces;
 
 public delegate void PlatformMouseMovedDelegate(IPlatformMouse mouse, int left, int top);
 

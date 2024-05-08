@@ -1,6 +1,6 @@
-﻿namespace ZweigEngine.Common.Interfaces.Video;
+﻿namespace ZweigEngine.Common.Video.Interfaces;
 
-public interface IVideoSurface
+public interface IVideoOutput
 {
     int GetWidth();
     int GetHeight();
