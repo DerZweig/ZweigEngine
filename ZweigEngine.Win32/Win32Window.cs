@@ -1,8 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using ZweigEngine.Common.Core;
-using ZweigEngine.Common.Interfaces;
-using ZweigEngine.Common.Interfaces.Platform;
-using ZweigEngine.Common.Interfaces.Platform.Constants;
+using ZweigEngine.Common.Platform.Constants;
+using ZweigEngine.Common.Platform.Interfaces;
 using ZweigEngine.Common.Utility.Interop;
 using ZweigEngine.Win32.Constants;
 using ZweigEngine.Win32.Prototypes;

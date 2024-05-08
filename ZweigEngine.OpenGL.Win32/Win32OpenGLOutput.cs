@@ -1,15 +1,14 @@
 ﻿using System.Runtime.InteropServices;
 using ZweigEngine.Common.Core;
-using ZweigEngine.Common.Interfaces;
-using ZweigEngine.Common.Interfaces.Platform;
-using ZweigEngine.Common.Interfaces.Video;
+using ZweigEngine.Common.Platform.Interfaces;
+using ZweigEngine.Common.Video.Interfaces;
 using ZweigEngine.OpenGL.Win32.Constants;
 using ZweigEngine.OpenGL.Win32.Prototypes;
 using ZweigEngine.OpenGL.Win32.Structures;
 
 namespace ZweigEngine.OpenGL.Win32;
 
-public class Win32OpenGLSurface : IDisposable, IOpenGLLoader, IVideoSurface
+public class Win32OpenGLOutput : IDisposable, IOpenGLLoader, IVideoOutput
 {
     private const byte                                PIXEL_FORMAT_COLOR_BITS             = 32;
     private const byte                                PIXEL_FORMAT_DEPTH_BITS             = 24;
@@ -47,7 +46,7 @@ public class Win32OpenGLSurface : IDisposable, IOpenGLLoader, IVideoSurface
     private          IntPtr                      m_dummy_context;
 
 
-    public Win32OpenGLSurface(NativeLibraryLoader libraryLoader, IPlatformWindow window, int majorVersion, int minorVersion)
+    public Win32OpenGLOutput(NativeLibraryLoader libraryLoader, IPlatformWindow window, int majorVersion, int minorVersion)
     {
         m_version_major = majorVersion;
         m_version_minor = minorVersion;
@@ -147,7 +146,7 @@ public class Win32OpenGLSurface : IDisposable, IOpenGLLoader, IVideoSurface
         GC.SuppressFinalize(this);
     }
 
-    ~Win32OpenGLSurface()
+    ~Win32OpenGLOutput()
     {
         ReleaseUnmanagedResources();
     }

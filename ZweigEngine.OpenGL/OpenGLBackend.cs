@@ -1,8 +1,9 @@
-﻿using ZweigEngine.OpenGL.Prototypes;
+﻿using ZweigEngine.Common.Video.Interfaces;
+using ZweigEngine.OpenGL.Prototypes;
 
 namespace ZweigEngine.OpenGL;
 
-public class OpenGLBackend : IDisposable
+public class OpenGLBackend : IVideoBackend, IDisposable
 {
     // ReSharper disable InconsistentNaming
     // ReSharper disable PrivateFieldCanBeConvertedToLocalVariable
