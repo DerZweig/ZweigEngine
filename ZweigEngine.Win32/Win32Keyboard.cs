@@ -1,4 +1,4 @@
-﻿using ZweigEngine.Common.Core;
+﻿using ZweigEngine.Common.Platform;
 using ZweigEngine.Common.Platform.Constants;
 using ZweigEngine.Common.Platform.Interfaces;
 using ZweigEngine.Win32.Constants;
@@ -152,7 +152,7 @@ public class Win32Keyboard : IPlatformKeyboard
         g_mapper[0x04A] = KeyboardKey.KeypadSubtract;
     }
 
-    public Win32Keyboard(NativeLibraryLoader libraryLoader)
+    public Win32Keyboard(PlatformLibraryLoader libraryLoader)
     {
         m_currentStates = new bool[KEYBOARD_TABLES_SIZE];
 

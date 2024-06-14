@@ -1,11 +1,13 @@
-﻿using ZweigEngine.Common.Video.Structures;
+﻿using ZweigEngine.Common.Video.Constants;
+using ZweigEngine.Common.Video.Structures;
 
 namespace ZweigEngine.Common.Video.Interfaces;
 
 public interface IVideoImage
 {
-    int GetWidth();
-    int GetHeight();
+    ushort Width  { get; }
+    ushort Height { get; }
 
     void Map(Action<VideoColor[]> mapper);
+    void Blit(in VideoRect dstRegion, in VideoRect srcRegion, in VideoColor tintColor, VideoBlitFlags blitFlags);
 }

@@ -58,6 +58,28 @@ internal class Win32Synchronization
             action();
         }
     }
+    
+    public void Execute()
+    {
+        if (SynchronizationContext.Current != m_context)
+        {
+            var previous = SynchronizationContext.Current;
+
+            try
+            {
+                SynchronizationContext.SetSynchronizationContext(m_context);
+                ExecutePending();
+            }
+            finally
+            {
+                SynchronizationContext.SetSynchronizationContext(previous);
+            }
+        }
+        else
+        {
+            ExecutePending();
+        }
+    }
 
     private void ExecutePending()
     {

@@ -1,5 +1,5 @@
 ﻿using System.Runtime.InteropServices;
-using ZweigEngine.Common.Core;
+using ZweigEngine.Common.Platform;
 using ZweigEngine.Common.Platform.Constants;
 using ZweigEngine.Common.Platform.Interfaces;
 using ZweigEngine.Common.Utility.Interop;
@@ -76,7 +76,7 @@ public class Win32Window : IDisposable, IPlatformWindow
     private          Win32Message                  m_message;
     private          Exception?                    m_error;
 
-    public Win32Window(NativeLibraryLoader libraryLoader, Win32Keyboard keyboard, Win32Mouse mouse)
+    public Win32Window(PlatformLibraryLoader libraryLoader, Win32Keyboard keyboard, Win32Mouse mouse, IWin32DPIScalingHandler _)
     {
         m_synchronization = new Win32Synchronization();
         m_proc            = new PinnedDelegate<PfnWindowProc>(Process, GCHandleType.Normal);
@@ -350,6 +350,7 @@ public class Win32Window : IDisposable, IPlatformWindow
             m_keyboard.BeginFrame();
             m_mouse.BeginFrame();
             OnUpdate?.Invoke(this);
+            m_synchronization.Execute();
         }));
     }
 

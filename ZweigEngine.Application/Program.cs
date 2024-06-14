@@ -1,9 +1,14 @@
-﻿using System.Diagnostics;
-using System.Runtime.InteropServices;
-using ZweigEngine.Application.Services.Video;
-using ZweigEngine.Common.Core;
+﻿using System.Runtime.InteropServices;
+using ZweigEngine.Application.Constants;
+using ZweigEngine.Application.Controller;
+using ZweigEngine.Common;
+using ZweigEngine.Common.Platform;
 using ZweigEngine.Common.Platform.Interfaces;
 using ZweigEngine.Common.Utility.Extensions;
+using ZweigEngine.Common.Video.Interfaces;
+using ZweigEngine.Video.Direct3D;
+using ZweigEngine.Video.OpenGL;
+using ZweigEngine.Video.OpenGL.Win32;
 using ZweigEngine.Win32;
 
 namespace ZweigEngine.Application;
@@ -11,42 +16,35 @@ namespace ZweigEngine.Application;
 internal static class Program
 {
     [STAThread]
-    private static void Main(string[] args)
+    private static void Main()
     {
-        try
+        var serviceConfig = new ServiceConfiguration();
+        serviceConfig.AddSingleton<PlatformLibraryLoader>();
+
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            var serviceConfig = new ServiceConfiguration();
-            serviceConfig.AddSingleton<NativeLibraryLoader>();
-            
+            serviceConfig.AddSingleton<IWin32DPIScalingHandler, IWin32DPIScalingHandler.ProcessPerMonitor>();
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                serviceConfig.AddSingleton<IPlatformWindow, Win32Window>();
-                serviceConfig.AddSingleton<IPlatformKeyboard, Win32Keyboard>();
-                serviceConfig.AddSingleton<IPlatformMouse, Win32Mouse>();
-                serviceConfig.AddSingleton<IPlatformInfo, Win32PlatformInfo>();
-                serviceConfig.AddSingleton<Win32VideoContext>();
-            }
-
-            using (var services = serviceConfig.Build())
-            {
-                var window = services.GetRequiredService<IPlatformWindow>();
-
-                window.Create();
-                window.SetTitle("ZweigEngine::Demo");
-                while (window.IsAvailable())
-                {
-                    window.Update();
-                }
-            }
+            serviceConfig.AddSingleton<IPlatformWindow, Win32Window>();
+            serviceConfig.AddSingleton<IPlatformKeyboard, Win32Keyboard>();
+            serviceConfig.AddSingleton<IPlatformMouse, Win32Mouse>();
+            serviceConfig.AddSingleton<IPlatformDisplayInfo, Win32PlatformDisplayInfo>();
+            serviceConfig.AddVarying<IVideoBackend, Direct3D11VideoBackend>(VideoSettings.RendererNameDirect3D);
+            serviceConfig.AddVarying<IVideoOutput, Direct3D11VideoOutput>(VideoSettings.RendererNameDirect3D);
+            serviceConfig.AddVarying<IVideoBackend, OpenGLBackend>(VideoSettings.RendererNameOpenGL);
+            serviceConfig.AddVarying<IVideoOutput, Win32OpenGLOutput>(VideoSettings.RendererNameOpenGL);
         }
-        catch (Exception ex)
+
+        serviceConfig.AddSingleton<VideoController>();
+        using (var services = serviceConfig.Build())
         {
-            if (Debugger.IsAttached)
+            var window = services.GetRequiredService<IPlatformWindow>();
+
+            window.Create();
+            window.SetTitle("ZweigEngine::Demo");
+            while (window.IsAvailable())
             {
-                Debug.WriteLine(ex.Message);
-                Debug.WriteLine(ex.StackTrace ?? string.Empty);
-                Debugger.Break();
+                window.Update();
             }
         }
     }
