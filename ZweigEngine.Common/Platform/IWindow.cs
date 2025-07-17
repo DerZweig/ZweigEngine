@@ -2,9 +2,9 @@
 
 namespace ZweigEngine.Common.Platform;
 
-public delegate void PlatformWindowDelegate(IPlatformWindow window);
+public delegate void PlatformWindowDelegate(IWindow window);
 
-public interface IPlatformWindow
+public interface IWindow
 {
     event PlatformWindowDelegate OnCreated;
     event PlatformWindowDelegate OnClosing;

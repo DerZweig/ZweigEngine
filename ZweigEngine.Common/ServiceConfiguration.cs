@@ -35,7 +35,7 @@ public class ServiceConfiguration
         {
             return;
         }
-        
+
         m_interfaces.Add(value);
         m_steps.Add(services =>
         {
@@ -48,10 +48,9 @@ public class ServiceConfiguration
             {
                 return false;
             }
-            
+
             services.AddSingleton(key, instance!);
             return true;
-
         });
     }
 
@@ -66,7 +65,7 @@ public class ServiceConfiguration
         {
             return;
         }
-        
+
         m_interfaces.Add(value);
         m_steps.Add(services =>
         {
@@ -79,13 +78,11 @@ public class ServiceConfiguration
             {
                 return false;
             }
-            
+
             services.AddToCollection<TElementInterface>(instance!);
             return true;
-
         });
     }
-
 
     public ServiceProvider Build()
     {

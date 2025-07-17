@@ -8,7 +8,7 @@ using ZweigEngine.Platform.Windows.Win32.Structures;
 
 namespace ZweigEngine.Platform.Windows.Win32;
 
-public sealed class Win32Window : IDisposable, IPlatformWindow
+public sealed class Win32Window : IDisposable, IWindow
 {
     private const ushort                    INVALID_ATOM               = 0;
     private const Win32WindowStyles         WINDOW_BASE_STYLE          = Win32WindowStyles.ClipChildren | Win32WindowStyles.ClipSiblings;

@@ -22,14 +22,14 @@ internal static class Program
         
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            config.AddSingleton<IPlatformWindow, Win32Window>();
-            config.AddSingleton<IPlatformKeyboard, Win32Keyboard>();
-            config.AddSingleton<IPlatformMouse, Win32Mouse>();
+            config.AddSingleton<IWindow, Win32Window>();
+            config.AddSingleton<IKeyboard, Win32Keyboard>();
+            config.AddSingleton<IMouse, Win32Mouse>();
         }
         
         using (var services = config.Build())
         {
-            var window = services.GetRequiredService<IPlatformWindow>();
+            var window = services.GetRequiredService<IWindow>();
 
             window.Create();
             window.SetTitle("ZweigEngine::Demo");

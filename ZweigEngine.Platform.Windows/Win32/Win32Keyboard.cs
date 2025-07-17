@@ -6,7 +6,7 @@ using ZweigEngine.Platform.Windows.Win32.Prototypes;
 
 namespace ZweigEngine.Platform.Windows.Win32;
 
-public sealed class Win32Keyboard : IPlatformKeyboard
+public sealed class Win32Keyboard : IKeyboard
 {
     private const uint KEYBOARD_PRESSED_STATE = 0x8000u;
     private const uint KEYBOARD_TABLES_SIZE   = 0x01FFu;
