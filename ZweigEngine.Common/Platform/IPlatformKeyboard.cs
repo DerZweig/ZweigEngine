@@ -2,13 +2,13 @@
 
 namespace ZweigEngine.Common.Platform;
 
-public delegate void PlatformKeyPressedDelegate(IKeyboard keyboard, KeyboardKey key);
+public delegate void PlatformKeyPressedDelegate(IPlatformKeyboard keyboard, KeyboardKey key);
 
-public delegate void PlatformKeyReleasedDelegate(IKeyboard keyboard, KeyboardKey key);
+public delegate void PlatformKeyReleasedDelegate(IPlatformKeyboard keyboard, KeyboardKey key);
 
-public delegate void PlatformKeyTypedDelegate(IKeyboard keyboard, char character);
+public delegate void PlatformKeyTypedDelegate(IPlatformKeyboard keyboard, char character);
 
-public interface IKeyboard
+public interface IPlatformKeyboard
 {
     event PlatformKeyPressedDelegate  OnKeyPressed;
     event PlatformKeyReleasedDelegate OnKeyReleased;

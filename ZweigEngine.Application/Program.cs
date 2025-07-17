@@ -19,18 +19,17 @@ internal static class Program
         config.AddSingleton<NativeLibraryLoader>();
         config.AddVariant<IImageReader, DDSImageReader>();
         config.AddVariant<IImageReader, TGAImageReader>();
-        
+
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            config.AddSingleton<IWindow, Win32Window>();
-            config.AddSingleton<IKeyboard, Win32Keyboard>();
-            config.AddSingleton<IMouse, Win32Mouse>();
+            config.AddSingleton<IPlatformWindow, Win32Window>();
+            config.AddSingleton<IPlatformKeyboard, Win32Keyboard>();
+            config.AddSingleton<IPlatformMouse, Win32Mouse>();
         }
-        
+
         using (var services = config.Build())
         {
-            var window = services.GetRequiredService<IWindow>();
-
+            var window = services.GetRequiredService<IPlatformWindow>();
             window.Create();
             window.SetTitle("ZweigEngine::Demo");
             while (window.IsAvailable())

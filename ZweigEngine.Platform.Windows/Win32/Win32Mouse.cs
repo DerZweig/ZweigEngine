@@ -4,7 +4,7 @@ using ZweigEngine.Platform.Windows.Win32.Constants;
 
 namespace ZweigEngine.Platform.Windows.Win32;
 
-public sealed class Win32Mouse : IMouse
+public sealed class Win32Mouse : IPlatformMouse
 {
     private readonly bool[] m_buttonStates;
     private          int    m_positionLeft;

@@ -2,15 +2,15 @@
 
 namespace ZweigEngine.Common.Platform;
 
-public delegate void PlatformMouseMovedDelegate(IMouse mouse, int left, int top);
+public delegate void PlatformMouseMovedDelegate(IPlatformMouse mouse, int left, int top);
 
-public delegate void PlatformMousePressedDelegate(IMouse mouse, int left, int top, MouseButton button);
+public delegate void PlatformMousePressedDelegate(IPlatformMouse mouse, int left, int top, MouseButton button);
 
-public delegate void PlatformMouseReleasedDelegate(IMouse mouse, int left, int top, MouseButton button);
+public delegate void PlatformMouseReleasedDelegate(IPlatformMouse mouse, int left, int top, MouseButton button);
 
-public delegate void PlatformMouseScrolledDelegate(IMouse mouse, int left, int top, int offset);
+public delegate void PlatformMouseScrolledDelegate(IPlatformMouse mouse, int left, int top, int offset);
 
-public interface IMouse
+public interface IPlatformMouse
 {
     event PlatformMouseMovedDelegate    OnMouseMoved;
     event PlatformMousePressedDelegate  OnMousePressed;

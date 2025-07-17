@@ -8,7 +8,7 @@ using ZweigEngine.Platform.Windows.Win32.Structures;
 
 namespace ZweigEngine.Platform.Windows.Win32;
 
-public sealed class Win32Window : IDisposable, IWindow
+public sealed class Win32Window : IDisposable, IPlatformWindow
 {
     private const ushort                    INVALID_ATOM               = 0;
     private const Win32WindowStyles         WINDOW_BASE_STYLE          = Win32WindowStyles.ClipChildren | Win32WindowStyles.ClipSiblings;
@@ -166,16 +166,16 @@ public sealed class Win32Window : IDisposable, IWindow
         if (m_class == INVALID_ATOM)
         {
             var classDesc = new Win32WindowClassEx
-                            {
-                                Size            = Marshal.SizeOf<Win32WindowClassEx>(),
-                                Styles          = WINDOW_CLASS_STYLE,
-                                ClassName       = WINDOW_CLASS_NAME,
-                                WindowProc      = m_proc.GetAddress(),
-                                InstanceHandle  = m_owner,
-                                IconHandle      = m_icon,
-                                SmallIconHandle = m_icon,
-                                CursorHandle    = m_cursor
-                            };
+            {
+                Size            = Marshal.SizeOf<Win32WindowClassEx>(),
+                Styles          = WINDOW_CLASS_STYLE,
+                ClassName       = WINDOW_CLASS_NAME,
+                WindowProc      = m_proc.GetAddress(),
+                InstanceHandle  = m_owner,
+                IconHandle      = m_icon,
+                SmallIconHandle = m_icon,
+                CursorHandle    = m_cursor
+            };
 
             m_class = RegisterClassEx(ref classDesc);
         }
@@ -229,7 +229,7 @@ public sealed class Win32Window : IDisposable, IWindow
         {
             return;
         }
-        
+
         NotifyWindowUpdate();
         RethrowError();
         if (!IsFocused())
@@ -256,7 +256,7 @@ public sealed class Win32Window : IDisposable, IWindow
         {
             return;
         }
-        
+
         var windowStyle   = GetWindowLong(m_handle, Win32WindowLongIndex.Style);
         var windowStyleEx = GetWindowLong(m_handle, Win32WindowLongIndex.ExtendedStyle);
 
@@ -295,7 +295,7 @@ public sealed class Win32Window : IDisposable, IWindow
         {
             return;
         }
-        
+
         if (left != m_position_left || top != m_position_top)
         {
             SetWindowPos(m_handle, IntPtr.Zero, left, top, 0, 0,
@@ -313,7 +313,7 @@ public sealed class Win32Window : IDisposable, IWindow
         {
             return;
         }
-        
+
         var cw = Math.Clamp(width, m_minimum_width, m_maximum_width);
         var ch = Math.Clamp(height, m_minimum_height, m_maximum_height);
 
@@ -334,7 +334,7 @@ public sealed class Win32Window : IDisposable, IWindow
         {
             return;
         }
-        
+
         m_minimum_width  = width;
         m_minimum_height = height;
         SetSize(m_size_width, m_size_height);
@@ -346,12 +346,12 @@ public sealed class Win32Window : IDisposable, IWindow
         {
             return;
         }
-        
+
         m_maximum_width  = width;
         m_maximum_height = height;
         SetSize(m_size_width, m_size_height);
     }
-    
+
     private void NotifyWindowUpdate()
     {
         WrapError(() => m_synchronization.Execute(() =>
