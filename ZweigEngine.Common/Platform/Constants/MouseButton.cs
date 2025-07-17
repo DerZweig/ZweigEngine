@@ -7,7 +7,7 @@ public enum MouseButton : uint
     Button3 = 2,
     Button4 = 3,
     Button5 = 4,
-    Left = Button1,
-    Right = Button2,
-    Middle = Button3
+    Left    = Button1,
+    Right   = Button2,
+    Middle  = Button3
 }

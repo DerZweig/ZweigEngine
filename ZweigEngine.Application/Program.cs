@@ -1,15 +1,12 @@
 ﻿using System.Runtime.InteropServices;
-using ZweigEngine.Application.Constants;
-using ZweigEngine.Application.Controller;
 using ZweigEngine.Common;
+using ZweigEngine.Common.Assets;
 using ZweigEngine.Common.Platform;
-using ZweigEngine.Common.Platform.Interfaces;
 using ZweigEngine.Common.Utility.Extensions;
-using ZweigEngine.Common.Video.Interfaces;
-using ZweigEngine.Video.Direct3D;
-using ZweigEngine.Video.OpenGL;
-using ZweigEngine.Video.OpenGL.Win32;
-using ZweigEngine.Win32;
+using ZweigEngine.Common.Utility.Interop;
+using ZweigEngine.Image.DDS;
+using ZweigEngine.Image.TGA;
+using ZweigEngine.Platform.Windows.Win32;
 
 namespace ZweigEngine.Application;
 
@@ -18,25 +15,19 @@ internal static class Program
     [STAThread]
     private static void Main()
     {
-        var serviceConfig = new ServiceConfiguration();
-        serviceConfig.AddSingleton<PlatformLibraryLoader>();
-
+        var config = new ServiceConfiguration();
+        config.AddSingleton<NativeLibraryLoader>();
+        config.AddVariant<IImageReader, DDSImageReader>();
+        config.AddVariant<IImageReader, TGAImageReader>();
+        
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            serviceConfig.AddSingleton<IWin32DPIScalingHandler, IWin32DPIScalingHandler.ProcessPerMonitor>();
-
-            serviceConfig.AddSingleton<IPlatformWindow, Win32Window>();
-            serviceConfig.AddSingleton<IPlatformKeyboard, Win32Keyboard>();
-            serviceConfig.AddSingleton<IPlatformMouse, Win32Mouse>();
-            serviceConfig.AddSingleton<IPlatformDisplayInfo, Win32PlatformDisplayInfo>();
-            serviceConfig.AddVarying<IVideoBackend, Direct3D11VideoBackend>(VideoSettings.RendererNameDirect3D);
-            serviceConfig.AddVarying<IVideoOutput, Direct3D11VideoOutput>(VideoSettings.RendererNameDirect3D);
-            serviceConfig.AddVarying<IVideoBackend, OpenGLBackend>(VideoSettings.RendererNameOpenGL);
-            serviceConfig.AddVarying<IVideoOutput, Win32OpenGLOutput>(VideoSettings.RendererNameOpenGL);
+            config.AddSingleton<IPlatformWindow, Win32Window>();
+            config.AddSingleton<IPlatformKeyboard, Win32Keyboard>();
+            config.AddSingleton<IPlatformMouse, Win32Mouse>();
         }
-
-        serviceConfig.AddSingleton<VideoController>();
-        using (var services = serviceConfig.Build())
+        
+        using (var services = config.Build())
         {
             var window = services.GetRequiredService<IPlatformWindow>();
 

@@ -2,6 +2,6 @@
 
 public enum WindowStyle : int
 {
-	Borderless,
-	Windowed
+    Borderless,
+    Windowed
 }
