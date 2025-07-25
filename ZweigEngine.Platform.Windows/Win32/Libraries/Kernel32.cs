@@ -1,6 +1,6 @@
 ﻿using ZweigEngine.Common.Services.Platform;
 
-namespace ZweigEngine.Platform.Windows.Win32.Prototypes;
+namespace ZweigEngine.Platform.Windows.Win32.Libraries;
 
 
 internal class Kernel32

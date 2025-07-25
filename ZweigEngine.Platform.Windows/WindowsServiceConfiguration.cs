@@ -1,7 +1,7 @@
 ﻿using ZweigEngine.Common.Services;
 using ZweigEngine.Platform.Windows.DirectX.DXGI;
 using ZweigEngine.Platform.Windows.Win32;
-using ZweigEngine.Platform.Windows.Win32.Prototypes;
+using ZweigEngine.Platform.Windows.Win32.Libraries;
 
 namespace ZweigEngine.Platform.Windows;
 

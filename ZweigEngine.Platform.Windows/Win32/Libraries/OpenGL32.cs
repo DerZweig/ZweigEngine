@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using ZweigEngine.Common.Services.Platform;
 
-namespace ZweigEngine.Platform.Windows.OpenGL.Libraries;
+namespace ZweigEngine.Platform.Windows.Win32.Libraries;
 
 public class OpenGL32
 {

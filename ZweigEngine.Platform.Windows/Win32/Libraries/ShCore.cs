@@ -2,7 +2,7 @@
 using ZweigEngine.Platform.Windows.Win32.Constants;
 using ZweigEngine.Platform.Windows.Win32.Structures;
 
-namespace ZweigEngine.Platform.Windows.Win32.Prototypes;
+namespace ZweigEngine.Platform.Windows.Win32.Libraries;
 
 
 internal class ShCore
