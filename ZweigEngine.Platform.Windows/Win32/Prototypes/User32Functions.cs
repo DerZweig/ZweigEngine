@@ -9,17 +9,17 @@ internal delegate bool PfnAdjustWindowRectExDelegate(ref Win32Rectangle rect, Wi
 internal delegate IntPtr PfnBeginPaintDelegate(IntPtr windowHandle, ref Win32PaintStruct paintStruct);
 
 internal delegate IntPtr PfnCreateWindowExDelegate(Win32WindowExtendedStyles extendedStyles,
-                                                 [MarshalAs(UnmanagedType.LPWStr)] string className,
-                                                 [MarshalAs(UnmanagedType.LPWStr)] string windowTitle,
-                                                 Win32WindowStyles windowStyles,
-                                                 int left,
-                                                 int right,
-                                                 int width,
-                                                 int height,
-                                                 IntPtr parentHandle,
-                                                 IntPtr menuHandle,
-                                                 IntPtr instanceHandle,
-                                                 IntPtr parameter);
+                                                   [MarshalAs(UnmanagedType.LPWStr)] string className,
+                                                   [MarshalAs(UnmanagedType.LPWStr)] string windowTitle,
+                                                   Win32WindowStyles windowStyles,
+                                                   int left,
+                                                   int right,
+                                                   int width,
+                                                   int height,
+                                                   IntPtr parentHandle,
+                                                   IntPtr menuHandle,
+                                                   IntPtr instanceHandle,
+                                                   IntPtr parameter);
 
 internal delegate IntPtr PfnDefaultWindowDelegate(IntPtr window, Win32MessageType message, IntPtr wParam, IntPtr lParam);
 
@@ -52,9 +52,9 @@ internal delegate IntPtr PfnLoadIconDelegate(IntPtr instanceHandle, IntPtr resou
 internal delegate uint PfnMapVirtualKeyDelegate(uint code, Win32MapVirtualKeyType mapType);
 
 internal delegate int PfnMessageBoxDelegate(IntPtr windowHandle,
-                                          [MarshalAs(UnmanagedType.LPWStr)] string text,
-                                          [MarshalAs(UnmanagedType.LPWStr)] string caption,
-                                          Win32MessageBoxOptions options);
+                                            [MarshalAs(UnmanagedType.LPWStr)] string text,
+                                            [MarshalAs(UnmanagedType.LPWStr)] string caption,
+                                            Win32MessageBoxOptions options);
 
 internal delegate uint PfnMsgWaitForMultipleObjectsDelegate(uint nCount, IntPtr[] handles, bool waitAll, uint milliseconds, Win32QueueStatusFlags wakeMask);
 

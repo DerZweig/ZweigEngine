@@ -1,12 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using ZweigEngine.Common;
-using ZweigEngine.Common.Assets;
-using ZweigEngine.Common.Platform;
-using ZweigEngine.Common.Utility.Extensions;
-using ZweigEngine.Common.Utility.Interop;
-using ZweigEngine.Image.DDS;
-using ZweigEngine.Image.TGA;
-using ZweigEngine.Platform.Windows.Win32;
+using ZweigEngine.Common.Services;
+using ZweigEngine.Platform.Windows;
 
 namespace ZweigEngine.Application;
 
@@ -16,26 +11,17 @@ internal static class Program
     private static void Main()
     {
         var config = new ServiceConfiguration();
-        config.AddSingleton<NativeLibraryLoader>();
-        config.AddVariant<IImageReader, DDSImageReader>();
-        config.AddVariant<IImageReader, TGAImageReader>();
+        config.AddCommonServices();
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            config.AddSingleton<IPlatformWindow, Win32Window>();
-            config.AddSingleton<IPlatformKeyboard, Win32Keyboard>();
-            config.AddSingleton<IPlatformMouse, Win32Mouse>();
+            config.AddWindowsPlatformServices();
         }
 
-        using (var services = config.Build())
+        using (var host = ServiceHost.Create(config))
         {
-            var window = services.GetRequiredService<IPlatformWindow>();
-            window.Create();
-            window.SetTitle("ZweigEngine::Demo");
-            while (window.IsAvailable())
-            {
-                window.Update();
-            }
+            host.InitializeServices();
+            
         }
     }
 }

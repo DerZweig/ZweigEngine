@@ -1,11 +1,11 @@
-﻿using ZweigEngine.Common.Assets;
-using ZweigEngine.Common.Assets.Constants;
+﻿using ZweigEngine.Common.Services.Assets;
+using ZweigEngine.Common.Services.Assets.Constants;
 using ZweigEngine.Image.DDS.Constants;
 using ZweigEngine.Image.DDS.Decoder;
 
 namespace ZweigEngine.Image.DDS;
 
-internal sealed class DDSImageInfo : IImageReader.IImageInfo
+internal sealed class DDSImageInfo : IImageInfo
 {
 	public long             StreamPosition { get; internal set; }
 	public ImagePixelFormat PixelType      { get; internal set; }

@@ -1,5 +1,5 @@
-﻿using ZweigEngine.Common.Assets;
-using ZweigEngine.Common.Assets.Constants;
+﻿using ZweigEngine.Common.Services.Assets;
+using ZweigEngine.Common.Services.Assets.Constants;
 using ZweigEngine.Common.Utility.Extensions;
 using ZweigEngine.Image.TGA.Constants;
 using ZweigEngine.Image.TGA.Structures;
@@ -8,7 +8,12 @@ namespace ZweigEngine.Image.TGA;
 
 public sealed class TGAImageReader : IImageReader
 {
-	public async Task<IImageReader.IImageInfo> LoadInfoBlockAsync(Stream stream, CancellationToken cancellationToken)
+	public bool ShouldHandleFilePath(string path)
+	{
+		return string.Equals(Path.GetExtension(path), ".tga", StringComparison.OrdinalIgnoreCase);
+	}
+
+	public async Task<IImageInfo> LoadInfoBlock(Stream stream, CancellationToken cancellationToken)
 	{
 		var header = await stream.ReadStructureAsync<TGAHeader>(cancellationToken).ConfigureAwait(false);
 		if (header.ImageType != TGAImageType.RunLengthEncoded && header.ImageType != TGAImageType.Uncompressed)
@@ -51,7 +56,7 @@ public sealed class TGAImageReader : IImageReader
 		}
 	}
 
-	public async Task<IReadOnlyList<byte>> LoadPixelDataAsync(Stream stream, IImageReader.IImageInfo imageInfo, CancellationToken cancellationToken)
+	public async Task<IReadOnlyList<byte>> LoadPixelData(Stream stream, IImageInfo imageInfo, CancellationToken cancellationToken)
 	{
 		var tgaImage = imageInfo as TGAImageInfo ?? throw new ArgumentOutOfRangeException(nameof(imageInfo));
 		var pixelSize = tgaImage.PixelType switch

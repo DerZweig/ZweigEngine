@@ -1,6 +1,8 @@
-﻿namespace ZweigEngine.Common.Utility.Interop;
+﻿using ZweigEngine.Common.Utility;
 
-public sealed class NativeLibraryLoader : IDisposable
+namespace ZweigEngine.Common.Services.Platform;
+
+internal sealed class NativeLibraryLoader : DisposableObject, INativeLibraryLoader
 {
     private readonly Dictionary<string, NativeLibraryInstance> m_libraries;
 
@@ -9,7 +11,7 @@ public sealed class NativeLibraryLoader : IDisposable
         m_libraries = new Dictionary<string, NativeLibraryInstance>();
     }
 
-    private void ReleaseUnmanagedResources()
+    protected override void ReleaseUnmanagedResources()
     {
         var instances = m_libraries.Values;
         m_libraries.Clear();
@@ -18,17 +20,6 @@ public sealed class NativeLibraryLoader : IDisposable
         {
             instance.Dispose();
         }
-    }
-
-    public void Dispose()
-    {
-        ReleaseUnmanagedResources();
-        GC.SuppressFinalize(this);
-    }
-
-    ~NativeLibraryLoader()
-    {
-        ReleaseUnmanagedResources();
     }
 
     public void LoadFunction<TDelegate>(string libraryPath, string exportName, out TDelegate func) where TDelegate : Delegate

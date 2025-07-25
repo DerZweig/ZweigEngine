@@ -1,10 +1,10 @@
-﻿using ZweigEngine.Common.Assets;
-using ZweigEngine.Common.Assets.Constants;
+﻿using ZweigEngine.Common.Services.Assets;
+using ZweigEngine.Common.Services.Assets.Constants;
 using ZweigEngine.Image.TGA.Constants;
 
 namespace ZweigEngine.Image.TGA;
 
-internal class TGAImageInfo : IImageReader.IImageInfo
+internal class TGAImageInfo : IImageInfo
 {
 	public long                    StreamPosition { get; internal set; }
 	public ImagePixelFormat        PixelType { get; internal set; }

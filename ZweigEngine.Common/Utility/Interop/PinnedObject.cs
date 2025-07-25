@@ -2,7 +2,7 @@
 
 namespace ZweigEngine.Common.Utility.Interop;
 
-public sealed class PinnedObject<TObject> : IDisposable
+public sealed class PinnedObject<TObject> : DisposableObject
 {
     private TObject? m_value;
     private GCHandle m_handle;
@@ -13,6 +13,22 @@ public sealed class PinnedObject<TObject> : IDisposable
         m_value   = value;
         m_handle  = GCHandle.Alloc(value);
         m_pointer = m_handle.AddrOfPinnedObject();
+    }
+
+    protected override void ReleaseUnmanagedResources()
+    {
+        if (m_handle.IsAllocated)
+        {
+            m_handle.Free();
+            m_pointer = IntPtr.Zero;
+        }
+
+        if (m_value is IDisposable disposable)
+        {
+            disposable.Dispose();
+        }
+
+        m_value = default;
     }
 
     public PinnedObject(in TObject value, GCHandleType type)
@@ -30,32 +46,5 @@ public sealed class PinnedObject<TObject> : IDisposable
     public IntPtr GetAddress()
     {
         return m_pointer;
-    }
-
-    private void ReleaseUnmanagedResources()
-    {
-        if (m_handle.IsAllocated)
-        {
-            m_handle.Free();
-            m_pointer = IntPtr.Zero;
-        }
-
-        if (m_value is IDisposable disposable)
-        {
-            disposable.Dispose();
-        }
-
-        m_value = default;
-    }
-
-    public void Dispose()
-    {
-        ReleaseUnmanagedResources();
-        GC.SuppressFinalize(this);
-    }
-
-    ~PinnedObject()
-    {
-        ReleaseUnmanagedResources();
     }
 }

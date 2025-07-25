@@ -1,4 +1,4 @@
-﻿namespace ZweigEngine.Common.Assets.Constants;
+﻿namespace ZweigEngine.Common.Services.Assets.Constants;
 
 public enum ImagePixelFormat
 {

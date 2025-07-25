@@ -2,7 +2,7 @@
 
 namespace ZweigEngine.Common.Utility.Interop;
 
-public sealed class PinnedDelegate<TDelegate> : IDisposable where TDelegate : Delegate
+public sealed class PinnedDelegate<TDelegate> : DisposableObject where TDelegate : Delegate
 {
     private GCHandle m_handle;
     private IntPtr   m_pointer;
@@ -13,12 +13,7 @@ public sealed class PinnedDelegate<TDelegate> : IDisposable where TDelegate : De
         m_pointer = Marshal.GetFunctionPointerForDelegate(value);
     }
 
-    public IntPtr GetAddress()
-    {
-        return m_handle.IsAllocated ? m_pointer : IntPtr.Zero;
-    }
-
-    private void ReleaseUnmanagedResources()
+    protected override void ReleaseUnmanagedResources()
     {
         if (m_handle.IsAllocated)
         {
@@ -27,15 +22,9 @@ public sealed class PinnedDelegate<TDelegate> : IDisposable where TDelegate : De
 
         m_pointer = IntPtr.Zero;
     }
-
-    public void Dispose()
+    
+    public IntPtr GetAddress()
     {
-        ReleaseUnmanagedResources();
-        GC.SuppressFinalize(this);
-    }
-
-    ~PinnedDelegate()
-    {
-        ReleaseUnmanagedResources();
+        return m_handle.IsAllocated ? m_pointer : IntPtr.Zero;
     }
 }

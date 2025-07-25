@@ -1,5 +1,5 @@
 ﻿using System.Runtime.InteropServices;
-using ZweigEngine.Common.Platform;
+using ZweigEngine.Common.Services.Platform;
 using ZweigEngine.Common.Utility.Interop;
 using ZweigEngine.Platform.Windows.DirectX.DXGI.VTables;
 using ZweigEngine.Platform.Windows.Win32.Structures;
@@ -12,7 +12,7 @@ internal sealed class DXGI
 
     private readonly PfnCreateDXGIFactory m_createFactory;
 
-    public DXGI(NativeLibraryLoader loader)
+    public DXGI(INativeLibraryLoader loader)
     {
         loader.LoadFunction("dxgi", "CreateDXGIFactory", out m_createFactory);
     }

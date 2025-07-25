@@ -1,8 +1,9 @@
 ﻿using System.Runtime.InteropServices;
+using ZweigEngine.Common.Utility;
 
-namespace ZweigEngine.Common.Utility.Interop;
+namespace ZweigEngine.Common.Services.Platform;
 
-internal sealed class NativeLibraryInstance : IDisposable
+internal sealed class NativeLibraryInstance : DisposableObject
 {
     private readonly IntPtr                    m_nativeHandle;
     private readonly Dictionary<string, Entry> m_exported;
@@ -17,7 +18,7 @@ internal sealed class NativeLibraryInstance : IDisposable
         m_exported = new Dictionary<string, Entry>();
     }
 
-    private void ReleaseUnmanagedResources()
+    protected override void ReleaseUnmanagedResources()
     {
         if (IsLoaded)
         {
@@ -25,17 +26,6 @@ internal sealed class NativeLibraryInstance : IDisposable
         }
 
         m_exported.Clear();
-    }
-
-    public void Dispose()
-    {
-        ReleaseUnmanagedResources();
-        GC.SuppressFinalize(this);
-    }
-
-    ~NativeLibraryInstance()
-    {
-        ReleaseUnmanagedResources();
     }
 
     public bool IsLoaded => m_nativeHandle != IntPtr.Zero;

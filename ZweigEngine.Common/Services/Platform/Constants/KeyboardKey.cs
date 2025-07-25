@@ -1,4 +1,4 @@
-﻿namespace ZweigEngine.Common.Platform.Constants;
+﻿namespace ZweigEngine.Common.Services.Platform.Constants;
 
 public enum KeyboardKey : uint
 {

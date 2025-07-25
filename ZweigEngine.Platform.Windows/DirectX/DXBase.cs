@@ -1,9 +1,10 @@
 ﻿using System.Runtime.InteropServices;
+using ZweigEngine.Common.Utility;
 
 namespace ZweigEngine.Platform.Windows.DirectX;
 
-internal abstract class DXBase : IDisposable
-{	
+internal abstract class DXBase : DisposableObject
+{
     protected delegate IntPtr MethodSelector<TTableType>(in TTableType table) where TTableType : struct;
 
     private IntPtr  m_pointer;
@@ -14,18 +15,7 @@ internal abstract class DXBase : IDisposable
         m_pointer = pointer;
     }
 
-    ~DXBase()
-    {
-        ReleaseUnmanagedResources();
-    }
-
-    public void Dispose()
-    {
-        ReleaseUnmanagedResources();
-        GC.SuppressFinalize(this);
-    }
-    
-    private void ReleaseUnmanagedResources()
+    protected override void ReleaseUnmanagedResources()
     {
         if (m_pointer != IntPtr.Zero)
         {
@@ -34,7 +24,7 @@ internal abstract class DXBase : IDisposable
             m_vtable  = null;
         }
     }
-    
+
     public IntPtr Self => m_pointer;
 
     protected void LoadMethod<TTableType, TDelegate>(MethodSelector<TTableType> selector, out TDelegate method) where TDelegate : Delegate where TTableType : struct
@@ -47,8 +37,8 @@ internal abstract class DXBase : IDisposable
         {
             if (m_vtable == null)
             {
-                var tablePointer = Marshal.PtrToStructure<IntPtr>(m_pointer);//*void***
-                m_vtable = Marshal.PtrToStructure<TTableType>(tablePointer);//*void**
+                var tablePointer = Marshal.PtrToStructure<IntPtr>(m_pointer); //*void***
+                m_vtable = Marshal.PtrToStructure<TTableType>(tablePointer); //*void**
             }
 
             var address = selector((TTableType)m_vtable);

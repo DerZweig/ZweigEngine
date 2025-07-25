@@ -1,5 +1,5 @@
-﻿using ZweigEngine.Common.Assets;
-using ZweigEngine.Common.Assets.Constants;
+﻿using ZweigEngine.Common.Services.Assets;
+using ZweigEngine.Common.Services.Assets.Constants;
 using ZweigEngine.Common.Utility.Extensions;
 using ZweigEngine.Image.DDS.Constants;
 using ZweigEngine.Image.DDS.Decoder;
@@ -11,7 +11,12 @@ public sealed class DDSImageReader : IImageReader
 {
 	private const DDSFlags REQUIRED_FLAGS = DDSFlags.Caps | DDSFlags.Width | DDSFlags.Height | DDSFlags.Pixelformat;
 
-	public async Task<IImageReader.IImageInfo> LoadInfoBlockAsync(Stream stream, CancellationToken cancellationToken)
+	public bool ShouldHandleFilePath(string path)
+	{
+		return string.Equals(Path.GetExtension(path), ".dds", StringComparison.OrdinalIgnoreCase);
+	}
+
+	public async Task<IImageInfo> LoadInfoBlock(Stream stream, CancellationToken cancellationToken)
 	{
 		var header      = await stream.ReadStructureAsync<DDSHeader>(cancellationToken).ConfigureAwait(false);
 		var magic       = BitConverter.GetBytes(header.Magic);
@@ -94,7 +99,7 @@ public sealed class DDSImageReader : IImageReader
 		return image;
 	}
 
-	public async Task<IReadOnlyList<byte>> LoadPixelDataAsync(Stream stream, IImageReader.IImageInfo imageInfo, CancellationToken cancellationToken)
+	public async Task<IReadOnlyList<byte>> LoadPixelData(Stream stream, IImageInfo imageInfo, CancellationToken cancellationToken)
 	{
 		var ddsImage   = imageInfo as DDSImageInfo ?? throw new ArgumentOutOfRangeException(nameof(imageInfo));
 		var dataBuffer = await GetUnprocessedFileDataAsync(stream, ddsImage, cancellationToken).ConfigureAwait(false);
